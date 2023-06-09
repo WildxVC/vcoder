@@ -1,0 +1,16 @@
+#custom-media-dropdown {
+  position: absolute;
+  inset: 0px auto auto 0px;
+  margin: 0px;
+  transform: translate(-110px, 34px);
+}
+
+@media screen and (max-width: 992px) {
+  #custom-media-dropdown {
+    transform: translate(-3px, 34px);
+  }
+
+  #login-avatar {
+    margin-top: 10px;
+  }
+}
