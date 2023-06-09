@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}Vcoder | Signup{% endblock title %}
+{% block body %}
+<div class="container mt-5 text-center">
+<h3 style="text-align: center; margin-top: 80px; margin-bottom: 30px">Create an Account</h3>
+<main class="form-signin mt-5">
+  <form action="{% url 'signup' %}" method="POST">
+    {% csrf_token %}
+    <div class="input-group mx-auto input-group-lg" style="width: 600px">
+      <span class="input-group-text">First and last name</span>
+      <input
+        type="text"
+        aria-label="First name"
+        class="form-control"
+        name="first"
+      />
+      <input
+        type="text"
+        aria-label="Last name"
+        class="form-control"
+        name="last"
+      />
+    </div>
+
+    <div
+      class="input-group flex-nowrap mx-auto input-group-lg"
+      style="width: 600px"
+    >
+      <span class="input-group-text" id="addon-wrapping">@</span>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Username"
+        aria-label="Username"
+        aria-describedby="addon-wrapping"
+        name="username"
+      />
+    </div>
+
+    <div class="form-floating mx-auto" style="width: 600px">
+      <input
+        type="email"
+        class="form-control"
+        id="floatingInput"
+        placeholder="name@example.com"
+        name="email"
+      />
+      <label for="floatingInput">Email address</label>
+    </div>
+    <div class="form-floating mx-auto" style="width: 600px">
+      <input
+        type="password"
+        class="form-control"
+        id="floatingPassword"
+        placeholder="Password"
+        name="password"
+      />
+      <label for="floatingPassword">Password</label>
+    </div>
+
+    <div class="form-floating mx-auto" style="width: 600px">
+      <input
+        type="password"
+        class="form-control"
+        id="floatingPassword"
+        placeholder="Password"
+        name="confirm"
+      />
+      <input type="hidden" name="next" value="{{ request.GET.next }}">
+      <label for="floatingPassword">Confirm Password</label>
+    </div>
+
+    <button class="btn btn-primary mt-5" type="submit" name="signup">
+      Sign Up
+    </button>
+  </form>
+</main>
+</div>
+{% endblock body %}

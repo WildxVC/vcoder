@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load sanitizer %}
+{% block title %}Vcoder | Home{% endblock title %}
+{% block homeactive %}active{% endblock homeactive %}
+{% block body %}
+<div class="p-5 mb-4 bg-light rounded-3">
+  <div class="container-fluid py-5">
+    <h1 class="display-5 fw-bold">Welcome to Vcoder!</h1>
+    <p class="col-md-8 fs-4">This is the best place for a coder's leisure.</p>
+    <a role="button" class="btn btn-primary btn-lg" href="{% url 'blogHome' %}">Go to Blogs</a>
+  </div>
+</div>
+
+<div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+  <div class="col-md-6 px-0">
+    <strong class="d-inline-block mb-2 text-primary">Article by {{newpost.author}}</strong>
+    <h1 class="display-4 fst-italic">{{newpost.title}}</h1>
+    <div class="mb-1 text-muted">{{newpost.timestamp}}<span class="badge bg-primary ms-2">Latest</span></div>
+    <p class="lead my-3">
+    <div class="preview">{% autoescape off %}{{newpost.content|truncatechars:200|striptags}}{% endautoescape %}</div>
+    </p>
+    <p class="lead mb-0"><a href="/blog/{{newpost.slug}}" class="text-white fw-bold">Continue reading...</a></p>
+  </div>
+</div>
+
+<div class="row mb-2 mx-auto">
+  <div class="col-md-6">
+    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+      <div class="col p-4 d-flex flex-column position-static">
+        <strong class="d-inline-block mb-2 text-primary">Article by {{secondpost.author}}</strong>
+        <h3 class="mb-0">{{secondpost.title|truncatechars:50}}</h3>
+        <div class="mb-1 text-muted">{{secondpost.timestamp}}</div>
+        <p class="card-text mb-auto">
+        <div class="preview">{% autoescape off %}{{secondpost.content|truncatechars:200|striptags}}{% endautoescape %}</div>
+        </p>
+        <a href="/blog/{{secondpost.slug}}" class="stretched-link">Continue reading</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+      <div class="col p-4 d-flex flex-column position-static">
+        <strong class="d-inline-block mb-2 text-primary">Article by {{thirdpost.author}}</strong>
+        <h3 class="mb-0">{{thirdpost.title|truncatechars:50}}</h3>
+        <div class="mb-1 text-muted">{{thirdpost.timestamp}}</div>
+        <p class="mb-auto">
+        <div class="preview">{% autoescape off %}{{thirdpost.content|truncatechars:200|striptags}}{% endautoescape %}</div>
+        </p>
+        <a href="blog/{{thirdpost.slug}}" class="stretched-link">Continue reading</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock body %}
