@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load extras %}
+{% load humanize %}
+
+{% block title %}Vcoder | {{post.slug}}{% endblock title %}
+{% block body %}
+<div class="container">
+  <article class="blog-post my-5">
+    <h2 class="blog-post-title">{{post.title}}</h2>
+    <p class="blog-post-meta">{{post.timestamp}} by <a href="#">{{post.author}}</a></p>
+
+    <p>{{post.content|safe}}</p>
+    <hr>
+
+  </article>
+</div>
+<div class="container">
+  <h2>Comments({{comments.count}})</h2>
+
+  {% if user.is_authenticated %}
+  <form action="{% url 'postComment' %}" method="POST">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="comment" class="form-label">Post comments :</label>
+      <input type="text" class="form-control" id="comment" name="comment" placeholder=" Enter your comment here">
+    </div>
+    <div class="mb-3">
+      <input type="hidden" name="postSno" value={{post.sno}} class="form-control">
+      <input type="hidden" name="parentSno" value="">
+    </div>
+    <button type="submit" class="btn btn-primary mb-3">Submit</button>
+  </form>
+  {% else %}
+  <div class="container"><span>Login to post a comment</span>
+    <a role="button" class="btn btn-outline-primary ms-3"
+      href="{% url 'login' %}?next={{ request.path|urlencode }}">Login</a>
+  </div>
+  {% endif %}
+
+  {% for comment in comments %}
+  <div class="row my-3">
+    <div class="col-md-1"><img src="https://nagriksevakendra.in/default/login/avatar.png" class="img-fluid ms-3"
+        style="width:42px" alt="profile picture">
+    </div>
+    <div class="col-md-11"><strong>{{comment.user.username}}</strong> <span
+        class="badge rounded-pill bg-light text-dark">{{comment.timestamp|naturaltime}}</span>
+      <div>{{comment.comment}}</div>
+
+      {% if user.is_authenticated %}
+      <a class="btn btn-outline-primary btn-sm my-2" data-bs-toggle="collapse" href="#replyBox{{comment.sno}}"
+        role="button" aria-expanded="false" aria-controls="replyBox{{comment.sno}}">
+        Reply
+      </a>
+      <div class="collapse" id="replyBox{{comment.sno}}">
+        <div class="card card-body">
+          <form action="{% url 'postComment' %}" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="comment" class="form-label">Add a reply :</label>
+              <input type="text" class="form-control" id="comment" name="comment"
+                placeholder=" Enter your comment here">
+              <input type="hidden" name="parentSno" value="{{comment.sno}}">
+            </div>
+            <div class="mb-3">
+              <input type="hidden" name="postSno" value={{post.sno}} class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary mb-3">Submit</button>
+          </form>
+        </div>
+      </div>
+      {% else %}
+      <a class="btn btn-outline-primary btn-sm my-2" data-bs-toggle="collapse" href="#replyBox{{comment.sno}}"
+        role="button" aria-expanded="false" aria-controls="replyBox{{comment.sno}}" style="pointer-events: none">
+        Login to reply
+      </a>
+      {% endif %}
+
+      {% if replyDict|get_val:comment.sno %}
+      <a data-bs-toggle="collapse" href="#viewReply{{comment.sno}}" aria-expanded="false"
+        aria-controls="viewReply{{comment.sno}}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+          class="bi bi-arrow-return-right" viewBox="0 0 16 16">
+          <path fill-rule="evenodd"
+            d="M1.5 1.5A.5.5 0 0 0 1 2v4.8a2.5 2.5 0 0 0 2.5 2.5h9.793l-3.347 3.346a.5.5 0 0 0 .708.708l4.2-4.2a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 8.3H3.5A1.5 1.5 0 0 1 2 6.8V2a.5.5 0 0 0-.5-.5z" />
+        </svg>
+        View all replies ({{replyDict|get_val:comment.sno|length}})
+      </a>
+      {% endif %}
+
+      <div class="collapse" id="viewReply{{comment.sno}}">
+        <div class="card card-body">
+          <div class="replies ms-3 my-2">
+            {% for reply in replyDict|get_val:comment.sno %}
+            <div class="row my-3">
+              <div class="col-md-1"><img src="https://nagriksevakendra.in/default/login/avatar.png"
+                  class="img-fluid ms-3" style="width:42px" alt="profile picture">
+              </div>
+              <div class="col-md-11">
+                <strong>{{reply.user.username}}</strong> <span
+                  class="badge rounded-pill bg-light text-dark">{{reply.timestamp|naturaltime}}</span>
+                <div>{{reply.comment}}</div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+    </div>
+    {% endfor %}
+  </div>
+
+
+  {% endblock body %}
